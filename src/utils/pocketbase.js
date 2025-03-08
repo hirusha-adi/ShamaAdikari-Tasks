@@ -27,12 +27,24 @@ export async function logout() {
   window.location.href = "/";
 }
 
-export async function newNadu(naduDetails, naduCaseNumber, naduDate) {
+export async function newNadu(naduDetails, naduCaseNumber, /* naduDate */) {
   await pb.collection(COLLECTION_NADU_DATA).create(
     {
       "details": naduDetails,
       "case_number": naduCaseNumber,
-      "date": naduDate
     }
   );
+}
+
+export async function getSelectNaduCaseNumbers() {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATA).getFullList({ fields: "case_number", sort: "-created" });
+
+  const formattedData = fromDb.map(item => ({
+    value: item.case_number,
+    label: item.case_number
+  }));
+
+  return formattedData;
+
+
 }

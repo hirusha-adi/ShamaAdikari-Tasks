@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { PlusCircle } from "react-bootstrap-icons";
-import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+
+import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
+import { getSelectNaduCaseNumbers } from "../../utils/pocketbase";
 
 const New = () => {
 
@@ -19,6 +22,14 @@ const New = () => {
     alert("test")
   }
 
+  const {
+    data: formListCaseNumbersData,
+    formListCaseNumbersLoading,
+    formListCaseNumbersError,
+  } = useFetchPocketbase(getSelectNaduCaseNumbers);
+
+  console.log(formListCaseNumbersData)
+
   return (
     <>
       <div className="bg-gray-100">
@@ -32,7 +43,7 @@ const New = () => {
                 {/* maye change this later: https://daisyui.com/components/calendar/#react-day-picker-example */}
                 <DayPicker className="react-day-picker" mode="single" selected={naduDate} onSelect={setNaduDate} />
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 w-md">
                 <div>
                   <label className="label">Case Number</label>
                   {/* <input
@@ -42,18 +53,27 @@ const New = () => {
                     onChange={(e) => setNaduCaseNumber(e.target.value)}
                     required
                   /> */}
-                  {/* <Select
-                    className="basic-single"
-                    classNamePrefix="select"
-                    defaultValue={colourOptions[0]}
-                    isDisabled={isDisabled}
-                    isLoading={isLoading}
-                    isClearable={isClearable}
-                    isRtl={isRtl}
-                    isSearchable={isSearchable}
-                    name="color"
-                    options={colourOptions}
-                  /> */}
+                  {formListCaseNumbersLoading ? (
+                    <p>Loading...</p>
+                  ) : (
+                    formListCaseNumbersError ? <p>Error: {formListCaseNumbersError}</p> :
+                      (
+                        <CreatableSelect
+                          className="basic-single"
+                          classNamePrefix="select"
+                          // defaultValue={formListCaseNumbersData[0]}
+                          isDisabled={false}
+                          // isLoading={formListCaseNumbersLoading}
+                          isClearable={true}
+                          isRtl={false}
+                          isSearchable={true}
+                          name="color"
+                          options={formListCaseNumbersData}
+                          placeholder="Select..."
+                        />
+                      )
+                  )}
+
                 </div>
                 <div>
                   <label className="label">Details</label>
