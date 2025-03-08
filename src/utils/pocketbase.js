@@ -25,3 +25,13 @@ export async function logout() {
     pb.authStore.clear();
     window.location.href = "/";
 }
+
+export async function newNadu(naduDetails, naduCaseNumber, naduDate) {
+    await pb.collection(COLLECTION_NADU).create(
+        {
+            "details": naduDetails,
+            "case_number": naduCaseNumber,
+            "date": naduDate
+        }
+    );
+}
