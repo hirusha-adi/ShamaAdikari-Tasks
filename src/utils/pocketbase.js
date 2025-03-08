@@ -28,12 +28,13 @@ export async function logout() {
 }
 
 export async function newNaduData(naduCaseNumber, naduDetails) {
-  await pb.collection(COLLECTION_NADU_DATA).create(
+  const res = await pb.collection(COLLECTION_NADU_DATA).create(
     {
       "details": naduDetails,
       "case_number": naduCaseNumber,
     }
   );
+  return res;
 }
 
 export async function updateNaduData(naduId, naduDetails) {
@@ -45,13 +46,15 @@ export async function updateNaduData(naduId, naduDetails) {
   );
 }
 
-export async function newNaduDate(naduCaseNumber, naduDate) {
-  await pb.collection(COLLECTION_NADU_DATES).create(
+export async function newNaduDate(naduCaseNumber, naduDate, ownerId) {
+  const res = await pb.collection(COLLECTION_NADU_DATES).create(
     {
+      "owner_id": ownerId,
       "case_number": naduCaseNumber,
       "date": naduDate,
     }
   );
+  return res;
 }
 
 export async function getSelectNaduCaseNumbers() {

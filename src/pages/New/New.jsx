@@ -7,6 +7,10 @@ import CreatableSelect from 'react-select/creatable';
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
 import { getSelectNaduCaseNumbers, getNaduData, newNaduData, newNaduDate, updateNaduData, getNaduDatesFromCaseNumber } from "../../utils/pocketbase";
 import { getDateOrdinalSuffix } from "../../utils/dates";
+import { showError, showLoad, showSuccess } from "../../utils/alerts";
+import { toastConfig } from "../../utils/consts";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const New = () => {
 
@@ -22,23 +26,41 @@ const New = () => {
 
 
   useEffect(() => {
-    document.title = `New`
+    document.title = `New Record`
   })
 
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const loadingPopup = showLoad();
 
-    if (isNewCase) {
-      await newNaduData(naduCaseNumber.value, naduDetails);
-      await newNaduDate(naduCaseNumber.value, naduDate);
-    }
-    else {
-      if (!existingNaduData) {
-        alert("big bug!")
+    try {
+      if (isNewCase) {
+        const resNaduData = await newNaduData(naduCaseNumber.value, naduDetails);
+        if (!resNaduData) {
+          throw new Error("BIG ERROR! Failed to create new Nadu Data");
+        }
+
+        const resNaduDate = await newNaduDate(naduCaseNumber.value, naduDate, resNaduData.id);
+        if (!resNaduDate) {
+          throw new Error("Failed to create new Nadu Date");
+        }
+
+        loadingPopup.close()
+        showSuccess();
+        toast.success('Saved changes!', toastConfig);
+
       }
-      await newNaduDate(naduCaseNumber.value, naduDate);
-      await updateNaduData(existingNaduData.id, naduDetails);
+      else {
+        if (!existingNaduData) {
+          alert("big bug!")
+        }
+        await newNaduDate(naduCaseNumber.value, naduDate);
+        await updateNaduData(existingNaduData.id, naduDetails);
+      }
+    } catch (error) {
+      loadingPopup.close()
+      showError(error?.message || error);
     }
 
   }
@@ -91,6 +113,18 @@ const New = () => {
   return (
     <>
       <div className="">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <div className="container mx-auto min-h-screen">
           <div className="px-12 pt-8 flex text-center justify-center">
             <h1 className="text-3xl font-bold">Create new Record</h1>
