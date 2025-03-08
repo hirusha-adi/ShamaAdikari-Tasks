@@ -23,7 +23,7 @@ const New = () => {
           <div className="px-12 pt-8 flex text-center justify-center">
             <h1 className="text-3xl font-bold">New</h1>
           </div>
-          <div className="px-12 pt-12">
+          <div className="px-12 pt-12 flex justify-center">
             <div className="flex flex-row gap-6">
               <div>
                 {/* maye change this later: https://daisyui.com/components/calendar/#react-day-picker-example */}
