@@ -7,24 +7,23 @@ const Header = () => {
     <>
       {isUserLoggedIn ? (
         <div className="navbar bg-base-100 shadow-sm">
-          <div className="flex-1">
-            <Link to={"/today"} className="btn btn-ghost text-xl">උසාවි දින පොත</Link>
-          </div>
-          <div className="flex-none">
+          <div className="navbar-start"></div>
+          <div className="navbar-center flex">
             <ul className="menu menu-horizontal px-1">
-              <li><NavLink to={"/new"}><CalendarEvent className="text-lg" /> Today</NavLink></li>
-              <li><NavLink to={"/new"}><PlusCircle className="text-lg" /> New</NavLink></li>
-              <li><NavLink to={"/search"}><Search className="text-lg" /> Search</NavLink></li>
+              <li><NavLink to={"/today"} className="active"><CalendarEvent className="text-lg" /> <div className="hidden md:block">Today</div></NavLink></li>
+              <li><NavLink to={"/new"}><PlusCircle className="text-lg" /> <div className="hidden md:block">New</div></NavLink></li>
+              <li><NavLink to={"/search"}><Search className="text-lg" /> <div className="hidden md:block">Search</div></NavLink></li>
               <li>
                 <details>
                   <summary>Other</summary>
-                  <ul className="bg-base-100 rounded-t-none p-2">
+                  <ul className="p-2">
                     <li><a onClick={() => logout()}>Logout</a></li>
                   </ul>
                 </details>
               </li>
             </ul>
           </div>
+          <div className="navbar-end"></div>
         </div>
       ) : (
         <></>
