@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import { PlusCircle } from "react-bootstrap-icons";
 
 const New = () => {
 
@@ -29,7 +30,7 @@ const New = () => {
                 {/* maye change this later: https://daisyui.com/components/calendar/#react-day-picker-example */}
                 <DayPicker className="react-day-picker" mode="single" selected={naduDate} onSelect={setNaduDate} />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-4">
                 <div>
                   <label className="label">Case Number</label>
                   <input
@@ -43,11 +44,14 @@ const New = () => {
                 <div>
                   <label className="label">Details</label>
                   <textarea
-                    className="textarea textarea-bordered w-full"
+                    className="textarea textarea-bordered w-full h-48"
                     value={naduDetails}
                     onChange={(e) => setNaduDetails(e.target.value)}
                     required
                   ></textarea>
+                </div>
+                <div className="btn btn-primary">
+                  <PlusCircle className="text-lg" /> Enter
                 </div>
               </div>
             </div>
