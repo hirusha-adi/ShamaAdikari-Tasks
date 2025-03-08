@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getNaduDatesTodayExpanded, getNaduDatesTomorrowExpanded, getNaduData } from "../../utils/pocketbase";
+import { getNaduDatesTodayExpanded, getNaduDatesTomorrowExpanded } from "../../utils/pocketbase";
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
 import { getFormattedDayWithSuffix } from "../../utils/dates";
 
