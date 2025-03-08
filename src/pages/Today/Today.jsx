@@ -39,7 +39,7 @@ const Today = () => {
           </div>
         </div>
 
-        <div className="pt-8 mx-auto min-w-md">
+        <div className="pt-8 mx-auto min-w-xs lg:min-w-md">
           <div className="text-center">
             <div className="text-5xl font-bold">
               Cases {selectedTab}
@@ -48,11 +48,11 @@ const Today = () => {
               {getFormattedDayWithSuffix(selectedTab)}
             </div>
           </div>
-          <div className="pt-10">
+          <div className="pt-10 px-3">
 
             {naduDatesData?.length > 0 ? naduDatesData?.map((data, index) => {
               return (
-                <div className="collapse bg-base-100 border-base-300 border" key={index}>
+                <div className="mt-2 collapse bg-base-100 border-gray-300 border-2" key={index}>
                   <input type="checkbox" defaultChecked />
                   <div className="collapse-title font-semibold">{data?.case_number}</div>
                   <div className="collapse-content text-sm">
