@@ -8,7 +8,9 @@ const Home = () => {
 
   return (
     <>
-      <h1>Home</h1>
+      <div className="flex justify-center items-center">
+        <h1>Usawi Dina Potha</h1>
+      </div>
       <div className="btn">Button</div>
     </>
   );
