@@ -80,7 +80,7 @@ export async function getNaduDatesFromCaseNumber(caseNumber) {
   return fromDb;
 }
 
-function filterStr_NaduDatesToday(date) {
+function filterStr_NaduDatesToday() {
   const now = new Date();
   const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
   const endOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
@@ -92,18 +92,16 @@ function filterStr_NaduDatesToday(date) {
 
 function filterStr_NaduDatesTomorrow() {
   const now = new Date();
-  const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
-  const endOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
-  const startOfTodayStr = startOfToday.toISOString().split('T')[0];
-  const endOfTodayStr = endOfToday.toISOString().split('T')[0];
-  const filterStr = `date >= '${startOfTodayStr}' && date < '${endOfTodayStr}'`
+  const startOfTomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+  const endOfTomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 2, 0, 0, 0));
+  const startOfTomorrowStr = startOfTomorrow.toISOString().split('T')[0];
+  const endOfTomorrowStr = endOfTomorrow.toISOString().split('T')[0];
+  const filterStr = `date >= '${startOfTomorrowStr}' && date < '${endOfTomorrowStr}'`
   return filterStr;
 }
 
 export async function getNaduDatesToday() {
-  // const filterStr = filterStr_NaduDatesToday();
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
-    // filter: filterStr,
     filter: `date >= @todayStart && date <= @todayEnd`,
     sort: '+case_number'
   });
@@ -112,10 +110,12 @@ export async function getNaduDatesToday() {
 
 export async function getNaduDatesTodayExpanded() {
   const filterStr = filterStr_NaduDatesToday();
+  console.log(filterStr)
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: filterStr,
     sort: '+case_number'
   });
+  console.log(fromDb)
   if (fromDb) {
     for (const naduDate of fromDb) {
       const naduData = await getNaduData(naduDate.case_number);
