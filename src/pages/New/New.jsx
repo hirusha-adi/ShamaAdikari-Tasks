@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { PlusCircle } from "react-bootstrap-icons";
+import Select from 'react-select';
 
 const New = () => {
 
@@ -34,13 +35,25 @@ const New = () => {
               <div className="flex flex-col gap-4">
                 <div>
                   <label className="label">Case Number</label>
-                  <input
+                  {/* <input
                     type="text"
                     className="input input-bordered w-full"
                     value={naduCaseNumber}
                     onChange={(e) => setNaduCaseNumber(e.target.value)}
                     required
-                  />
+                  /> */}
+                  {/* <Select
+                    className="basic-single"
+                    classNamePrefix="select"
+                    defaultValue={colourOptions[0]}
+                    isDisabled={isDisabled}
+                    isLoading={isLoading}
+                    isClearable={isClearable}
+                    isRtl={isRtl}
+                    isSearchable={isSearchable}
+                    name="color"
+                    options={colourOptions}
+                  /> */}
                 </div>
                 <div>
                   <label className="label">Details</label>
