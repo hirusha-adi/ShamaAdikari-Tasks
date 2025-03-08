@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getNaduDatesToday, getNaduDatesTomorrow } from "../../utils/pocketbase";
+import { getNaduDatesTodayExpanded, getNaduDatesTomorrowExpanded, getNaduData } from "../../utils/pocketbase";
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
 import { getFormattedDayWithSuffix } from "../../utils/dates";
 
@@ -10,11 +10,14 @@ const Today = () => {
     document.title = selectedTab;
   }, [selectedTab]);
 
-  const { data: naduDatesData, loading: naduLoading, error: naduErrors } = useFetchPocketbase(
-    selectedTab === "Today" ? getNaduDatesToday : getNaduDatesTomorrow
+  const {
+    data: naduDatesData,
+    // loading: naduLoading,
+    // error: naduErrors
+    // setData: setNaduDatesData
+  } = useFetchPocketbase(
+    selectedTab === "Today" ? getNaduDatesTodayExpanded : getNaduDatesTomorrowExpanded
   );
-
-  console.log(getNaduDatesToday())
 
   return (
     <div className="container mx-auto min-h-screen">
@@ -47,17 +50,17 @@ const Today = () => {
           </div>
           <div className="pt-10">
 
-            {naduDatesData?.map((data, index) => {
+            {naduDatesData?.length > 0 ? naduDatesData?.map((data, index) => {
               return (
                 <div className="collapse bg-base-100 border-base-300 border" key={index}>
                   <input type="checkbox" defaultChecked />
-                  <div className="collapse-title font-semibold">How do I create an account?</div>
+                  <div className="collapse-title font-semibold">{data?.case_number}</div>
                   <div className="collapse-content text-sm">
-                    Click the "Sign Up" button in the top right corner and follow the registration process.
+                    {data?.expanded?.details}
                   </div>
                 </div>
               );
-            })}
+            }) : "No data"}
 
           </div>
         </div>

@@ -23,5 +23,5 @@ export function useFetchPocketbase(fetchFunction, ...args) {
     fetchData();
   }, [fetchFunction, ...args]);
 
-  return { data, loading, error };
+  return { data, loading, error, setData };
 }
