@@ -14,24 +14,24 @@ export const isUserLoggedIn = pb.authStore.isValid;
 export const user = pb.authStore;
 
 export async function login(email, password) {
-    if (!email || !password) {
-        return null;
-    }
-    await pb.collection(COLLECTION_USERS).authWithPassword(email.trim(), password);
-    window.location.reload();
+  if (!email || !password) {
+    return null;
+  }
+  await pb.collection(COLLECTION_USERS).authWithPassword(email.trim(), password);
+  window.location.reload();
 }
 
 export async function logout() {
-    pb.authStore.clear();
-    window.location.href = "/";
+  pb.authStore.clear();
+  window.location.href = "/";
 }
 
 export async function newNadu(naduDetails, naduCaseNumber, naduDate) {
-    await pb.collection(COLLECTION_NADU).create(
-        {
-            "details": naduDetails,
-            "case_number": naduCaseNumber,
-            "date": naduDate
-        }
-    );
+  await pb.collection(COLLECTION_NADU).create(
+    {
+      "details": naduDetails,
+      "case_number": naduCaseNumber,
+      "date": naduDate
+    }
+  );
 }
