@@ -79,3 +79,43 @@ export async function getNaduDatesFromCaseNumber(caseNumber) {
   );
   return fromDb;
 }
+
+export async function getNaduDatesToday() {
+  const now = new Date();
+
+  // Get today's date (UTC)
+  const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
+  const endOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+  const startOfTodayStr = startOfToday.toISOString().split('T')[0];
+  const endOfTodayStr = endOfToday.toISOString().split('T')[0];
+  const filterStr = `date >= '${startOfTodayStr}' && date < '${endOfTodayStr}'`
+
+  console.log(filterStr)
+
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
+    // filter: filterStr,
+    filter: `date >= @todayStart && date <= @todayEnd`,
+    sort: '+case_number'
+  });
+  return fromDb;
+}
+
+export async function getNaduDatesTomorrow() {
+  const now = new Date();
+
+  // Get tomorrow's date (UTC)
+  const startOfTomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+  const endOfTomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 2, 0, 0, 0));
+  const startOfTomorrowStr = startOfTomorrow.toISOString().split('T')[0];
+  const endOfTomorrowStr = endOfTomorrow.toISOString().split('T')[0];
+  const filterStr = `date >= '${startOfTomorrowStr}' && date < '${endOfTomorrowStr}'`
+
+  console.log(filterStr)
+
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
+    filter: filterStr,
+    sort: '+case_number'
+  });
+  console.log(fromDb)
+  return fromDb;
+}
