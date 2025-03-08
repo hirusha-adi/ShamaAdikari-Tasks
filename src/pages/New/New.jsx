@@ -15,6 +15,7 @@ const New = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    alert("test")
   }
 
   return (
@@ -50,7 +51,7 @@ const New = () => {
                     required
                   ></textarea>
                 </div>
-                <div className="btn btn-primary">
+                <div className="btn btn-primary" onClick={handleSubmit}>
                   <PlusCircle className="text-lg" /> Enter
                 </div>
               </div>

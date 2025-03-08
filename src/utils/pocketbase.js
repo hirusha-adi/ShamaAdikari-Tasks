@@ -2,7 +2,8 @@ import PocketBase from "pocketbase";
 
 const url = "https://shama-db.h3ck.cc";
 const COLLECTION_USERS = "users";
-const COLLECTION_NADU = "nadu";
+const COLLECTION_NADU_DATA = "nadu_data";
+const COLLECTION_NADU_DATES = "nadu_dates";
 
 export const pb = new PocketBase(url);
 
@@ -27,7 +28,7 @@ export async function logout() {
 }
 
 export async function newNadu(naduDetails, naduCaseNumber, naduDate) {
-  await pb.collection(COLLECTION_NADU).create(
+  await pb.collection(COLLECTION_NADU_DATA).create(
     {
       "details": naduDetails,
       "case_number": naduCaseNumber,
