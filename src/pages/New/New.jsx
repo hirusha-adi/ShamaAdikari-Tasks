@@ -73,13 +73,13 @@ const New = () => {
       }
       else {
         setIsNewCase(false);
+
         const naduDetails = await getNaduData(naduCaseNumber.value);
-        console.log(naduDetails)
         setExistingNaduData(naduDetails);
-        const naduDates = await getNaduDatesFromCaseNumber(naduCaseNumber.value);
-        console.log(naduDates)
-        setExistingNaduDates(naduDates);
         setNaduDetails(naduDetails?.details);
+
+        const naduDates = await getNaduDatesFromCaseNumber(naduCaseNumber.value);
+        setExistingNaduDates(naduDates);
       }
 
     }

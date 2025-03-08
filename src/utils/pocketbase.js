@@ -71,6 +71,12 @@ export async function getNaduData(caseNumber) {
 }
 
 export async function getNaduDatesFromCaseNumber(caseNumber) {
-  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList(`case_number="${caseNumber}"`);
+  console.log("XX caseNumber: ", caseNumber)
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList(
+    {
+      filter: `case_number="${caseNumber}"`,
+    }
+  );
+  console.log("XX fromDb: ", fromDb)
   return fromDb;
 }
