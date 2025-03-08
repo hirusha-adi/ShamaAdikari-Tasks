@@ -1,4 +1,4 @@
-import { isUserLoggedIn } from "../utils/pocketbase";
+import { isUserLoggedIn, logout } from "../utils/pocketbase";
 
 const Header = () => {
   return (
@@ -15,7 +15,7 @@ const Header = () => {
                 <details>
                   <summary>Other</summary>
                   <ul className="bg-base-100 rounded-t-none p-2">
-                    <li><a>Logout</a></li>
+                    <li><a onClick={() => logout()}>Logout</a></li>
                   </ul>
                 </details>
               </li>
