@@ -5,7 +5,10 @@ const AllRoutes = () => {
   return (
     <>
       <Routes>
+        {/* Main */}
         <Route path="/" element={<Home />} />
+
+        {/* Errors */}
         <Route path="*" element={<Navigate to={"/404"} />} />
         <Route path="/404" element={<PageNotFound />} />
       </Routes>
