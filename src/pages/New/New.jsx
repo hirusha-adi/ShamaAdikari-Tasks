@@ -9,9 +9,13 @@ import { getSelectNaduCaseNumbers, getNaduData } from "../../utils/pocketbase";
 
 const New = () => {
 
+  // form data
   const [naduDetails, setNaduDetails] = useState("");
   const [naduCaseNumber, setNaduCaseNumber] = useState(null);
   const [naduDate, setNaduDate] = useState(new Date());
+
+  // other stuff
+  const [isNewCase, setIsNewCase] = useState(null);
 
   useEffect(() => {
     document.title = `New`
@@ -34,10 +38,20 @@ const New = () => {
         setNaduDetails("");
         return "";
       }
-      console.log("xxx", naduCaseNumber)
-      const naduDetails = await getNaduData(naduCaseNumber.value);
-      console.log(naduDetails)
-      setNaduDetails(naduDetails?.details);
+
+      console.log("naduCaseNumber: ", naduCaseNumber)
+
+      if (naduCaseNumber?.__isNew__) {
+        setIsNewCase(true);
+        setNaduDetails("");
+      }
+      else {
+        setIsNewCase(false);
+        const naduDetails = await getNaduData(naduCaseNumber.value);
+        console.log(naduDetails)
+        setNaduDetails(naduDetails?.details);
+      }
+
     }
     runOnChange()
 
@@ -90,6 +104,11 @@ const New = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="">
+            {isNewCase && (
+              "New Case"
+            )}
           </div>
 
         </div>

@@ -27,11 +27,20 @@ export async function logout() {
   window.location.href = "/";
 }
 
-export async function newNadu(naduDetails, naduCaseNumber, /* naduDate */) {
+export async function newNaduData(naduDetails, naduCaseNumber) {
   await pb.collection(COLLECTION_NADU_DATA).create(
     {
       "details": naduDetails,
       "case_number": naduCaseNumber,
+    }
+  );
+}
+
+export async function newNaduDate(naduCaseNumber, naduDate) {
+  await pb.collection(COLLECTION_NADU_DATES).create(
+    {
+      "case_number": naduCaseNumber,
+      "date": naduDate,
     }
   );
 }
@@ -49,5 +58,10 @@ export async function getSelectNaduCaseNumbers() {
 
 export async function getNaduData(caseNumber) {
   const fromDb = await pb.collection(COLLECTION_NADU_DATA).getFirstListItem(`case_number="${caseNumber}"`);
+  return fromDb;
+}
+
+export async function getNaduDatesFromCaseNumber(caseNumber) {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList(`case_number="${caseNumber}"`);
   return fromDb;
 }
