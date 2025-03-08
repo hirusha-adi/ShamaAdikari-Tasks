@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { PlusCircle } from "react-bootstrap-icons";
+import { PlusCircle, XLg } from "react-bootstrap-icons";
 import CreatableSelect from 'react-select/creatable';
 
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
-import { getSelectNaduCaseNumbers, getNaduData } from "../../utils/pocketbase";
+import { getSelectNaduCaseNumbers, getNaduData, newNaduData, newNaduDate, updateNaduData } from "../../utils/pocketbase";
 
 const New = () => {
 
@@ -16,14 +16,39 @@ const New = () => {
 
   // other stuff
   const [isNewCase, setIsNewCase] = useState(null);
+  const [existingNaduData, setExistingNaduData] = useState(null);
+  const [existingNaduDates, setExistingNaduDates] = useState(null);
+
 
   useEffect(() => {
     document.title = `New`
   })
 
+
   async function handleSubmit(e) {
     e.preventDefault();
-    alert("test")
+
+    if (isNewCase) {
+      await newNaduData(naduCaseNumber.value, naduDetails);
+      await newNaduDate(naduCaseNumber.value, naduDate);
+    }
+    else {
+      if (!existingNaduData) {
+        alert("big bug!")
+      }
+      await newNaduDate(naduCaseNumber.value, naduDate);
+      await updateNaduData(existingNaduData.id, naduDetails);
+    }
+
+  }
+
+  async function resetForms() {
+    setNaduCaseNumber(null);
+    setNaduDetails("");
+    setNaduDate(new Date());
+    setIsNewCase(null);
+    setExistingNaduData(null);
+    setExistingNaduDates(null);
   }
 
   const {
@@ -49,6 +74,7 @@ const New = () => {
         setIsNewCase(false);
         const naduDetails = await getNaduData(naduCaseNumber.value);
         console.log(naduDetails)
+        setExistingNaduData(naduDetails);
         setNaduDetails(naduDetails?.details);
       }
 
@@ -99,9 +125,16 @@ const New = () => {
                     required
                   ></textarea>
                 </div>
-                <div className="btn btn-primary" onClick={handleSubmit}>
-                  <PlusCircle className="text-lg" /> Enter
+
+                <div className="flex items-center gap-2">
+                  <button className="flex-1 btn btn-primary flex items-center justify-center" onClick={handleSubmit}>
+                    <PlusCircle className="text-lg" /> Enter
+                  </button>
+                  <button className="btn btn-error flex items-center justify-center" onClick={resetForms}>
+                    <XLg className="text-lg" /> Clear
+                  </button>
                 </div>
+
               </div>
             </div>
           </div>

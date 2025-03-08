@@ -27,11 +27,20 @@ export async function logout() {
   window.location.href = "/";
 }
 
-export async function newNaduData(naduDetails, naduCaseNumber) {
+export async function newNaduData(naduCaseNumber, naduDetails) {
   await pb.collection(COLLECTION_NADU_DATA).create(
     {
       "details": naduDetails,
       "case_number": naduCaseNumber,
+    }
+  );
+}
+
+export async function updateNaduData(naduId, naduDetails) {
+  await pb.collection(COLLECTION_NADU_DATA).update(
+    naduId,
+    {
+      "details": naduDetails,
     }
   );
 }
