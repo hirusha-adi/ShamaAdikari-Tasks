@@ -23,5 +23,5 @@ export async function login(email, password) {
 
 export async function logout() {
     pb.authStore.clear();
-    window.location.reload();
+    window.location.href = "/";
 }

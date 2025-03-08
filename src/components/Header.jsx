@@ -1,4 +1,6 @@
 import { isUserLoggedIn, logout } from "../utils/pocketbase";
+import { Search, PlusCircle } from "react-bootstrap-icons";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -10,7 +12,8 @@ const Header = () => {
           </div>
           <div className="flex-none">
             <ul className="menu menu-horizontal px-1">
-              <li><a>Link</a></li>
+              <li><NavLink to={"/new"}><PlusCircle className="text-lg" /> New</NavLink></li>
+              <li><NavLink to={"/search"}><Search className="text-lg" /> Search</NavLink></li>
               <li>
                 <details>
                   <summary>Other</summary>

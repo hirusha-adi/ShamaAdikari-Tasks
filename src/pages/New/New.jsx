@@ -1,19 +1,19 @@
 import { useEffect } from "react";
 
-const Home = () => {
+const New = () => {
 
   useEffect(() => {
-    document.title = `Home`
+    document.title = `New`
   })
 
   return (
     <>
       <div className="flex justify-center items-center">
-        <h1>උසාවි දින පොත</h1>
+        <h1>New</h1>
       </div>
       <div className="btn">Button</div>
     </>
   );
 };
 
-export { Home }
+export { New }

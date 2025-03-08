@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom"
-import { Home, PageNotFound, Login } from "../pages"
+import { Today, PageNotFound, Login, New, Search } from "../pages"
 import { isUserLoggedIn } from "../utils/pocketbase";
 
 const AllRoutes = () => {
@@ -10,7 +10,9 @@ const AllRoutes = () => {
         <Route path="/" element={isUserLoggedIn ? <Navigate to={"/today"} /> : <Login />} />
 
         {/* protected */}
-        <Route path="/today" element={isUserLoggedIn ? <Home /> : <Navigate to={"/404"} />} />
+        <Route path="/today" element={isUserLoggedIn ? <Today /> : <Navigate to={"/404"} />} />
+        <Route path="/new" element={isUserLoggedIn ? <New /> : <Navigate to={"/404"} />} />
+        <Route path="/search" element={isUserLoggedIn ? <Search /> : <Navigate to={"/404"} />} />
 
         {/* Errors */}
         <Route path="*" element={<Navigate to={"/404"} />} />
