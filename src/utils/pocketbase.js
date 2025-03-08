@@ -45,6 +45,9 @@ export async function getSelectNaduCaseNumbers() {
   }));
 
   return formattedData;
+}
 
-
+export async function getNaduData(caseNumber) {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATA).getFirstListItem(`case_number="${caseNumber}"`);
+  return fromDb;
 }

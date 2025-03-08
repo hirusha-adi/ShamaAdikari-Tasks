@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <>
       {isUserLoggedIn ? (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-100 shadow-lg">
           <div className="navbar-start"></div>
           <div className="navbar-center flex">
             <ul className="menu menu-horizontal px-1">

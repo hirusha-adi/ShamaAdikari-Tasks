@@ -5,12 +5,12 @@ import { PlusCircle } from "react-bootstrap-icons";
 import CreatableSelect from 'react-select/creatable';
 
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
-import { getSelectNaduCaseNumbers } from "../../utils/pocketbase";
+import { getSelectNaduCaseNumbers, getNaduData } from "../../utils/pocketbase";
 
 const New = () => {
 
   const [naduDetails, setNaduDetails] = useState("");
-  const [naduCaseNumber, setNaduCaseNumber] = useState("");
+  const [naduCaseNumber, setNaduCaseNumber] = useState(null);
   const [naduDate, setNaduDate] = useState(new Date());
 
   useEffect(() => {
@@ -28,7 +28,20 @@ const New = () => {
     formListCaseNumbersError,
   } = useFetchPocketbase(getSelectNaduCaseNumbers);
 
-  console.log(formListCaseNumbersData)
+  useEffect(() => {
+    async function runOnChange() {
+      if (!naduCaseNumber) {
+        setNaduDetails("");
+        return "";
+      }
+      console.log("xxx", naduCaseNumber)
+      const naduDetails = await getNaduData(naduCaseNumber.value);
+      console.log(naduDetails)
+      setNaduDetails(naduDetails?.details);
+    }
+    runOnChange()
+
+  }, [naduCaseNumber]);
 
   return (
     <>
@@ -46,30 +59,18 @@ const New = () => {
               <div className="flex flex-col gap-4 w-md">
                 <div>
                   <label className="label">Case Number</label>
-                  {/* <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={naduCaseNumber}
-                    onChange={(e) => setNaduCaseNumber(e.target.value)}
-                    required
-                  /> */}
                   {formListCaseNumbersLoading ? (
                     <p>Loading...</p>
                   ) : (
                     formListCaseNumbersError ? <p>Error: {formListCaseNumbersError}</p> :
                       (
                         <CreatableSelect
-                          className="basic-single"
-                          classNamePrefix="select"
-                          // defaultValue={formListCaseNumbersData[0]}
-                          isDisabled={false}
-                          // isLoading={formListCaseNumbersLoading}
-                          isClearable={true}
-                          isRtl={false}
-                          isSearchable={true}
-                          name="color"
-                          options={formListCaseNumbersData}
+                          isClearable
+                          isSearchable
                           placeholder="Select..."
+                          options={formListCaseNumbersData}
+                          value={naduCaseNumber}
+                          onChange={(e) => setNaduCaseNumber(e)}
                         />
                       )
                   )}
