@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { PlusCircle, XLg } from "react-bootstrap-icons";
+import { PlusCircle, XLg, ClockHistory } from "react-bootstrap-icons";
 import CreatableSelect from 'react-select/creatable';
 
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
-import { getSelectNaduCaseNumbers, getNaduData, newNaduData, newNaduDate, updateNaduData } from "../../utils/pocketbase";
+import { getSelectNaduCaseNumbers, getNaduData, newNaduData, newNaduDate, updateNaduData, getNaduDatesFromCaseNumber } from "../../utils/pocketbase";
+import { getDateOrdinalSuffix } from "../../utils/dates";
 
 const New = () => {
 
@@ -75,6 +76,9 @@ const New = () => {
         const naduDetails = await getNaduData(naduCaseNumber.value);
         console.log(naduDetails)
         setExistingNaduData(naduDetails);
+        const naduDates = await getNaduDatesFromCaseNumber(naduCaseNumber.value);
+        console.log(naduDates)
+        setExistingNaduDates(naduDates);
         setNaduDetails(naduDetails?.details);
       }
 
@@ -85,12 +89,12 @@ const New = () => {
 
   return (
     <>
-      <div className="bg-gray-100">
+      <div className="">
         <div className="container mx-auto min-h-screen">
           <div className="px-12 pt-8 flex text-center justify-center">
-            <h1 className="text-3xl font-bold">New</h1>
+            <h1 className="text-3xl font-bold">Create new Record</h1>
           </div>
-          <div className="px-12 pt-12 flex justify-center">
+          <div className="px-12 pt-12 pb-16 flex justify-center">
             <div className="flex flex-row gap-6">
               <div>
                 {/* maye change this later: https://daisyui.com/components/calendar/#react-day-picker-example */}
@@ -105,7 +109,7 @@ const New = () => {
                     formListCaseNumbersError ? <p>Error: {formListCaseNumbersError}</p> :
                       (
                         <CreatableSelect
-                          isClearable
+                          // isClearable // because i want to clear everything
                           isSearchable
                           placeholder="Select..."
                           options={formListCaseNumbersData}
@@ -138,11 +142,46 @@ const New = () => {
               </div>
             </div>
           </div>
+
           <div className="">
-            {isNewCase && (
-              "New Case"
+            {isNewCase ? (
+              <>
+                <div className="flex justify-center items-center">
+                  <div className="text-xl font-bold">New entry! No previous days recorded!</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <div className="text-xl font-bold">
+                    <ClockHistory className="text-2xl inline-block mr-2" /> Previous dates:
+                  </div>
+                  <div>
+                    <ul className="list bg-base-100 rounded-box shadow-md">
+                      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Previous dates:</li>
+                      {existingNaduDates?.map((date, index) => {
+                        const dateObj = new Date(date.date);
+                        const formattedDate = dateObj.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
+                        const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "long" }); // Get day name
+                        return (
+                          <li key={index} className="list-row">
+                            <div>
+                              <div>{formattedDate} </div>
+                              <div className="text-xs uppercase font-semibold opacity-60">({dayOfWeek})</div>
+                            </div>
+                          </li>
+                        );
+                      })}
+
+
+                    </ul>
+                  </div>
+                </div>
+              </>
+
             )}
           </div>
+
 
         </div>
       </div>
