@@ -38,12 +38,13 @@ export async function newNaduData(naduCaseNumber, naduDetails) {
 }
 
 export async function updateNaduData(naduId, naduDetails) {
-  await pb.collection(COLLECTION_NADU_DATA).update(
+  const res = await pb.collection(COLLECTION_NADU_DATA).update(
     naduId,
     {
       "details": naduDetails,
     }
   );
+  return res;
 }
 
 export async function newNaduDate(naduCaseNumber, naduDate, ownerId) {

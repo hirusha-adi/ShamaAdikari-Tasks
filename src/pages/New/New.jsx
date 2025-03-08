@@ -48,15 +48,26 @@ const New = () => {
 
         loadingPopup.close()
         showSuccess();
-        toast.success('Saved changes!', toastConfig);
-
       }
       else {
         if (!existingNaduData) {
-          alert("big bug!")
+          throw new Error("BIG ERROR! Failed to get existing Nadu Data");
         }
-        await newNaduDate(naduCaseNumber.value, naduDate);
-        await updateNaduData(existingNaduData.id, naduDetails);
+
+        const resNaduDate = await newNaduDate(naduCaseNumber.value, naduDate, existingNaduData.id);
+        if (!resNaduDate) {
+          throw new Error("Failed to create new Nadu Date");
+        }
+
+        if (!(existingNaduData.details === naduDetails)) {
+          // only update if detailed have changed
+          const resNaduData = await updateNaduData(existingNaduData.id, naduDetails);
+          if (!resNaduData) {
+            throw new Error("Failed to update existing Nadu Data");
+          }
+        }
+
+        loadingPopup.close()
       }
     } catch (error) {
       loadingPopup.close()
