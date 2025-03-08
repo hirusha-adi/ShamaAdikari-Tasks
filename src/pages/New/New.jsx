@@ -83,6 +83,7 @@ const New = () => {
       }
 
     }
+
     runOnChange()
 
   }, [naduCaseNumber]);
@@ -158,16 +159,21 @@ const New = () => {
                   </div>
                   <div>
                     <ul className="list bg-base-100 rounded-box shadow-md">
-                      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Previous dates:</li>
+                      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">{existingNaduDates?.length} hearings</li>
                       {existingNaduDates?.map((date, index) => {
                         const dateObj = new Date(date.date);
                         const formattedDate = dateObj.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
                         const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "long" }); // Get day name
+
+                        const dayOfMonth = dateObj.getDate();
+                        const monthName = dateObj.toLocaleDateString("en-US", { month: "long" });
+                        const formattedDateWithSuffix = `${getDateOrdinalSuffix(dayOfMonth)} of ${monthName} ${dateObj.getFullYear()}`;
+
                         return (
                           <li key={index} className="list-row">
                             <div>
                               <div>{formattedDate} </div>
-                              <div className="text-xs uppercase font-semibold opacity-60">({dayOfWeek})</div>
+                              <div className="text-xs font-semibold opacity-60">{formattedDateWithSuffix} ({dayOfWeek})</div>
                             </div>
                           </li>
                         );
