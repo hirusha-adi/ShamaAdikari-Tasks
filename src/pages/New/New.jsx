@@ -144,7 +144,7 @@ const New = () => {
             </div>
           </div>
 
-          <div className="">
+          <div className="pb-16">
             {isNewCase ? (
               <>
                 <div className="flex justify-center items-center">
@@ -152,37 +152,44 @@ const New = () => {
                 </div>
               </>
             ) : (
-              <>
-                <div>
-                  <div className="text-xl font-bold">
-                    <ClockHistory className="text-2xl inline-block mr-2" /> Previous dates:
-                  </div>
+              existingNaduDates?.length > 0 ?
+                <>
                   <div>
+                    <div className="text-xl font-bold">
+                      <ClockHistory className="text-2xl inline-block mr-2" /> {existingNaduDates?.length} Previous dates:
+                    </div>
+                    <div>
+                      <ul className="list bg-base-100 rounded-box shadow-md">
+                        <div className="px-2 pt-4">
+                          {existingNaduDates?.map((date, index) => {
+                            const dateObj = new Date(date.date);
+                            const formattedDate = dateObj.toLocaleDateString("en-US"); // Format as DD/MM/YYYY
+                            const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "long" }); // Get day name
 
-                    <ul className="list bg-base-100 rounded-box shadow-md">
-                      <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">{existingNaduDates?.length} hearings</li>
-                      {existingNaduDates?.map((date, index) => {
-                        const dateObj = new Date(date.date);
-                        const formattedDate = dateObj.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
-                        const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "long" }); // Get day name
+                            const dayOfMonth = dateObj.getDate();
+                            const monthName = dateObj.toLocaleDateString("en-US", { month: "long" });
+                            const formattedDateWithSuffix = `${getDateOrdinalSuffix(dayOfMonth)} of ${monthName} ${dateObj.getFullYear()}`;
 
-                        const dayOfMonth = dateObj.getDate();
-                        const monthName = dateObj.toLocaleDateString("en-US", { month: "long" });
-                        const formattedDateWithSuffix = `${getDateOrdinalSuffix(dayOfMonth)} of ${monthName} ${dateObj.getFullYear()}`;
-
-                        return (
-                          <li key={index} className="list-row">
-                            <div>
-                              <div>{formattedDate} </div>
-                              <div className="text-xs font-semibold opacity-60">{formattedDateWithSuffix} ({dayOfWeek})</div>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                            return (
+                              <li key={index} className="list-row">
+                                <div>
+                                  <div>{formattedDate}</div>
+                                  <div className="text-xs font-semibold opacity-60">{formattedDateWithSuffix} ({dayOfWeek})</div>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </div>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </>
+                </> : (
+                  <>
+                    <div className="flex justify-center items-center">
+                      <div className="text-xl font-bold">No previous days recorded!</div>
+                    </div>
+                  </>
+                )
             )}
           </div>
 

@@ -74,6 +74,7 @@ export async function getNaduDatesFromCaseNumber(caseNumber) {
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList(
     {
       filter: `case_number="${caseNumber}"`,
+      sort: "-created"
     }
   );
   return fromDb;
