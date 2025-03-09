@@ -1,8 +1,15 @@
 import { isUserLoggedIn, logout } from "../utils/pocketbase";
 import { Search, PlusCircle, CalendarEvent } from "react-bootstrap-icons";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
+  const { i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   return (
     <>
       {isUserLoggedIn ? (
@@ -17,6 +24,8 @@ const Header = () => {
                 <details>
                   <summary>Other</summary>
                   <ul className="p-2">
+                    <li><a onClick={() => changeLanguage("en")}>English</a></li>
+                    <li><a onClick={() => changeLanguage("si")}>Sinhala</a></li>
                     <li><a onClick={() => logout()}>Logout</a></li>
                   </ul>
                 </details>

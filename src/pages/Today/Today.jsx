@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { getNaduDatesTodayExpanded, getNaduDatesTomorrowExpanded } from "../../utils/pocketbase";
 import { useFetchPocketbase } from "../../hooks/useFetchPocketbase";
 import { getFormattedDayWithSuffix } from "../../utils/dates";
+import { useTranslation } from "react-i18next";
 
 const Today = () => {
+  const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState("Today");
 
   useEffect(() => {
@@ -49,7 +51,6 @@ const Today = () => {
             </div>
           </div>
 
-
           {naduLoading ? (
             <>
               <div className="flex flex-row items-center justify-center mt-24">
@@ -73,7 +74,7 @@ const Today = () => {
                   </div>
                 );
               }) : <>
-                <div className="text-center text-gray-700">No cases added. Please check the log book!</div>
+                <div className="text-center text-gray-700">{t("no_cases")}</div>
               </>}
             </div>
           )}
