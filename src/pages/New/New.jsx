@@ -48,6 +48,7 @@ const New = () => {
 
         loadingPopup.close()
         showSuccess();
+        resetForms();
       }
       else {
         if (!existingNaduData) {

@@ -144,13 +144,8 @@ export async function getNaduDatesTomorrowExpanded() {
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: filterStr,
     sort: '+case_number',
+    expand: 'owner_id'
   });
   console.log(fromDb)
-  if (fromDb) {
-    for (const naduDate of fromDb) {
-      const naduData = await getNaduData(naduDate.case_number);
-      naduDate.expanded = naduData;
-    }
-  }
   return fromDb;
 }

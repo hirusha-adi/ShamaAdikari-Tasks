@@ -12,7 +12,7 @@ const Today = () => {
 
   const {
     data: naduDatesData,
-    // loading: naduLoading,
+    loading: naduLoading,
     // error: naduErrors
     // setData: setNaduDatesData
   } = useFetchPocketbase(
@@ -48,21 +48,36 @@ const Today = () => {
               {getFormattedDayWithSuffix(selectedTab)}
             </div>
           </div>
-          <div className="pt-10 px-3">
 
-            {naduDatesData?.length > 0 ? naduDatesData?.map((data, index) => {
-              return (
-                <div className="mt-2 collapse bg-base-100 border-gray-300 border-2" key={index}>
-                  <input type="checkbox" defaultChecked />
-                  <div className="collapse-title font-semibold">{data?.case_number}</div>
-                  <div className="collapse-content text-sm">
-                    {data?.expanded?.details}
+
+          {naduLoading ? (
+            <>
+              <div className="flex flex-row items-center justify-center mt-24">
+                <span className="loading loading-ball loading-xs"></span>
+                <span className="loading loading-ball loading-sm"></span>
+                <span className="loading loading-ball loading-md"></span>
+                <span className="loading loading-ball loading-lg"></span>
+                <span className="loading loading-ball loading-xl"></span>
+              </div>
+            </>
+          ) : (
+            <div className="pt-10 px-3 flex flex-col gap-4">
+              {naduDatesData?.length > 0 ? naduDatesData?.map((data, index) => {
+                return (
+                  <div className="collapse bg-base-100 border-gray-300 border shadow-md" key={index}>
+                    <input type="checkbox" defaultChecked />
+                    <div className="collapse-title font-semibold">{data?.case_number}</div>
+                    <div className="collapse-content text-sm">
+                      {data?.expanded?.details}
+                    </div>
                   </div>
-                </div>
-              );
-            }) : "No data"}
+                );
+              }) : <>
+                <div className="text-center text-gray-700">No cases added. Please check the log book!</div>
+              </>}
+            </div>
+          )}
 
-          </div>
         </div>
 
       </div>
