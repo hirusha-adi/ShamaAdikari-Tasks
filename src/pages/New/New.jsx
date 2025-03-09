@@ -68,6 +68,8 @@ const New = () => {
         }
 
         loadingPopup.close()
+        showSuccess();
+        resetForms();
       }
     } catch (error) {
       loadingPopup.close()
@@ -107,12 +109,28 @@ const New = () => {
       else {
         setIsNewCase(false);
 
-        const naduDetails = await getNaduData(naduCaseNumber.value);
-        setExistingNaduData(naduDetails);
-        setNaduDetails(naduDetails?.details);
+        const loadingPopup = showLoad();
+        try {
+          const naduDetails = await getNaduData(naduCaseNumber.value);
+          if (!naduDetails) {
+            throw new Error("BIG ERROR! Failed to get existing Nadu Data");
+          }
+          loadingPopup.close()
+          toast.success("Loaded data!", toastConfig);
 
-        const naduDates = await getNaduDatesFromCaseNumber(naduCaseNumber.value);
-        setExistingNaduDates(naduDates);
+          setExistingNaduData(naduDetails);
+          setNaduDetails(naduDetails?.details);
+
+          const naduDates = await getNaduDatesFromCaseNumber(naduCaseNumber.value);
+          if (!naduDates) {
+            throw new Error("Failed to get existing Nadu Dates");
+          }
+          setExistingNaduDates(naduDates);
+
+        } catch (error) {
+          loadingPopup.close()
+          showError(error?.message || error);
+        }
       }
 
     }
@@ -229,7 +247,7 @@ const New = () => {
                     </div>
                   </div>
                 </> : (
-                  <>
+                  naduCaseNumber && <>
                     <div className="flex justify-center items-center">
                       <div className="text-xl font-bold">No previous days recorded!</div>
                     </div>

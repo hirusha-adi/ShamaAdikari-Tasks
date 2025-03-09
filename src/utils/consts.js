@@ -2,7 +2,7 @@
 // for `react-toastify`
 export const toastConfig = {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 1500,
     hideProgressBar: false,
     closeOnClick: false,
     pauseOnHover: true,
