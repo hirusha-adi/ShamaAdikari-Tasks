@@ -33,19 +33,20 @@ const Search = () => {
     var manyResults;
 
     if (searchMethod === "search_by_date") {
-      manyResults = false;
+      manyResults = true;
       results = []
       const resultsDates = await getNaduByDate(searchValueDate);
       for (const item of resultsDates) {
         const tmp = {}
         tmp.naduData = item.expand.owner_id
-        tmp.naduDate = [{ ...item, expand: undefined },]
-        results.push({ naduData: item, naduDate: item })
+        tmp.naduDate = [{ ...item, expand: undefined }]
+        results.push(tmp)
       }
     }
 
     else if (searchMethod === "search_by_details") {
       const naduUsers = await getNaduDataByDetails(searchValueText);
+      // FIX! if 1 user, bugs the fuck out
       if (naduUsers.length > 1) {
         manyResults = true;
       }
