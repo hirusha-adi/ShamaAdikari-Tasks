@@ -85,6 +85,17 @@ export async function getNaduDatesFromCaseNumber(caseNumber) {
   return fromDb;
 }
 
+function filterStr_NaduDates(date) {
+  const dateOffset = new Date(date.getTime() + 6.5 * 60 * 60 * 1000);
+  const givenDate = new Date(dateOffset);
+  const startOfDay = new Date(Date.UTC(givenDate.getUTCFullYear(), givenDate.getUTCMonth(), givenDate.getUTCDate(), 0, 0, 0));
+  const endOfDay = new Date(Date.UTC(givenDate.getUTCFullYear(), givenDate.getUTCMonth(), givenDate.getUTCDate() + 1, 0, 0, 0));
+  const startOfDayStr = startOfDay.toISOString().split('T')[0];
+  const endOfDayStr = endOfDay.toISOString().split('T')[0];
+  const filterStr = `date >= '${startOfDayStr}' && date < '${endOfDayStr}'`;
+  return filterStr;
+}
+
 function filterStr_NaduDatesToday() {
   const now = new Date();
   const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
@@ -115,13 +126,11 @@ export async function getNaduDatesToday() {
 
 export async function getNaduDatesTodayExpanded() {
   const filterStr = filterStr_NaduDatesToday();
-  console.log(filterStr)
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: filterStr,
     sort: '+case_number',
     expand: 'owner_id'
   });
-  console.log(fromDb)
   return fromDb;
 }
 
@@ -136,12 +145,20 @@ export async function getNaduDatesTomorrow() {
 
 export async function getNaduDatesTomorrowExpanded() {
   const filterStr = filterStr_NaduDatesTomorrow();
-  console.log(filterStr)
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: filterStr,
     sort: '+case_number',
     expand: 'owner_id'
   });
-  console.log(fromDb)
+  return fromDb;
+}
+
+export async function getNaduByDate(date) {
+  const filterStr = filterStr_NaduDates(date);
+  console.log(filterStr)
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
+    filter: filterStr,
+    expand: 'owner_id'
+  });
   return fromDb;
 }

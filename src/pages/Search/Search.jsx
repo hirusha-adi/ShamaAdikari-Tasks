@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
 import { XLg, Search as SearchIcon } from "react-bootstrap-icons";
 import { DayPicker } from "react-day-picker";
+import { getNaduByDate } from "../../utils/pocketbase";
 
 const Search = () => {
 
   const [searchMethod, setSearchMethod] = useState("search_by_details")
   const [searchValueDate, setSearchValueDate] = useState(null)
+  const [searchValueText, setSearchValueText] = useState("")
 
   useEffect(() => {
     document.title = `Search`
   })
+
+  async function handleSearch(e) {
+    e.preventDefault();
+    console.log("sdfd")
+    if (searchMethod === "search_by_date") {
+      const results = getNaduByDate(searchValueDate);
+      console.log(results)
+    }
+  }
+
 
   return (
     <>
@@ -43,11 +55,13 @@ const Search = () => {
                 type="text"
                 placeholder="Type here..."
                 className="input w-full sm:w-72"
+                value={searchValueText}
+                onChange={(e) => setSearchValueText(e.target.value)}
               />
             )}
 
             <div className="flex gap-3">
-              <button className="btn btn-primary inline-flex items-center">
+              <button className="btn btn-primary inline-flex items-center" onClick={(e) => handleSearch(e)}>
                 <SearchIcon className="text-lg mr-1" />
                 Search
               </button>
@@ -55,6 +69,8 @@ const Search = () => {
                 <XLg className="text-lg" />
               </button>
             </div>
+          </div>
+          <div className="container mx-auto">
 
           </div>
         </div>
