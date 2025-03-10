@@ -176,6 +176,7 @@ export async function getNaduDateByDataId(id) {
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: `owner_id="${id}"`,
     sort: '-created',
+    expand: 'owner_id',
   });
   return fromDb;
 }
@@ -183,8 +184,13 @@ export async function getNaduDateByDataId(id) {
 export async function getNaduDatesByCaseNumber(caseNumber) {
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: `case_number="${caseNumber}"`,
-    sort: '-created',
+    sort: '-date',
     expand: 'owner_id',
   });
+  return fromDb;
+}
+
+export async function getNaduDataById(id) {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATA).getFirstListItem(`id="${id}"`);
   return fromDb;
 }
