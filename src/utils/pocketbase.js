@@ -48,11 +48,12 @@ export async function updateNaduData(naduId, naduDetails) {
 }
 
 export async function newNaduDate(naduCaseNumber, naduDate, ownerId) {
+  const dateOffset = new Date(naduDate.getTime() + 6.5 * 60 * 60 * 1000);
   const res = await pb.collection(COLLECTION_NADU_DATES).create(
     {
       "owner_id": ownerId,
       "case_number": naduCaseNumber,
-      "date": naduDate,
+      "date": dateOffset,
     }
   );
   return res;
@@ -117,15 +118,10 @@ export async function getNaduDatesTodayExpanded() {
   console.log(filterStr)
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: filterStr,
-    sort: '+case_number'
+    sort: '+case_number',
+    expand: 'owner_id'
   });
   console.log(fromDb)
-  if (fromDb) {
-    for (const naduDate of fromDb) {
-      const naduData = await getNaduData(naduDate.case_number);
-      naduDate.expanded = naduData;
-    }
-  }
   return fromDb;
 }
 

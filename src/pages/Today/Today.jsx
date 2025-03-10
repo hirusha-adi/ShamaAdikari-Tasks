@@ -69,7 +69,7 @@ const Today = () => {
                     <input type="checkbox" defaultChecked />
                     <div className="collapse-title font-semibold">{data?.case_number}</div>
                     <div className="collapse-content text-sm">
-                      {data?.expanded?.details}
+                      {data?.expand?.owner_id?.details}
                     </div>
                   </div>
                 );
