@@ -7,10 +7,10 @@ const AllRoutes = () => {
     <>
       <Routes>
         {/* Main */}
-        <Route path="/" element={isUserLoggedIn ? <Navigate to={"/today"} /> : <Login />} />
+        <Route path="/" element={isUserLoggedIn ? <Navigate to={"/cases"} /> : <Login />} />
 
         {/* protected */}
-        <Route path="/today" element={isUserLoggedIn ? <Today /> : <Navigate to={"/404"} />} />
+        <Route path="/cases" element={isUserLoggedIn ? <Today /> : <Navigate to={"/404"} />} />
         <Route path="/new" element={isUserLoggedIn ? <New /> : <Navigate to={"/404"} />} />
         <Route path="/search" element={isUserLoggedIn ? <Search /> : <Navigate to={"/404"} />} />
 
