@@ -158,7 +158,33 @@ export async function getNaduByDate(date) {
   console.log(filterStr)
   const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
     filter: filterStr,
-    expand: 'owner_id'
+    sort: '+case_number',
+    expand: 'owner_id',
+  });
+  return fromDb;
+}
+
+export async function getNaduDataByDetails(details) {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATA).getFullList({
+    filter: `details ~ "${details}"`,
+    sort: '-created'
+  });
+  return fromDb;
+}
+
+export async function getNaduDateByDataId(id) {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
+    filter: `owner_id="${id}"`,
+    sort: '-created',
+  });
+  return fromDb;
+}
+
+export async function getNaduDatesByCaseNumber(caseNumber) {
+  const fromDb = await pb.collection(COLLECTION_NADU_DATES).getFullList({
+    filter: `case_number="${caseNumber}"`,
+    sort: '-created',
+    expand: 'owner_id',
   });
   return fromDb;
 }

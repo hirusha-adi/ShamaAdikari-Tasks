@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { XLg, Search as SearchIcon } from "react-bootstrap-icons";
 import { DayPicker } from "react-day-picker";
-import { getNaduByDate } from "../../utils/pocketbase";
+import { getNaduByDate, getNaduDataByDetails, getNaduDatesByCaseNumber, getNaduDateByDataId } from "../../utils/pocketbase";
 
 const Search = () => {
 
   const [searchMethod, setSearchMethod] = useState("search_by_details")
   const [searchValueDate, setSearchValueDate] = useState(null)
   const [searchValueText, setSearchValueText] = useState("")
+  const [results, setResults] = useState([])
+  const [isManyData, setIsManyData] = useState(false)
 
   useEffect(() => {
     document.title = `Search`
@@ -15,11 +17,40 @@ const Search = () => {
 
   async function handleSearch(e) {
     e.preventDefault();
-    console.log("sdfd")
+
+    var results;
+    var manyResults;
+
     if (searchMethod === "search_by_date") {
-      const results = getNaduByDate(searchValueDate);
+      manyResults = false;
+      results = await getNaduByDate(searchValueDate);
+    }
+
+    else if (searchMethod === "search_by_details") {
+      const naduUsers = await getNaduDataByDetails(searchValueText);
+      if (naduUsers.length > 1) {
+        manyResults = true;
+      }
+      results = []
+      for (const user of naduUsers) {
+        const naduDate = await getNaduDateByDataId(user.id);
+        results.push({ naduData: user, naduDate: naduDate })
+      }
+
       console.log(results)
     }
+
+    else if (searchMethod === "search_by_case_number") {
+      results = await getNaduDatesByCaseNumber(searchValueText);
+    }
+
+    else {
+      console.log("epic bug")
+    }
+
+    setIsManyData(manyResults)
+    setResults(results)
+    console.log(results)
   }
 
 
@@ -71,6 +102,29 @@ const Search = () => {
             </div>
           </div>
           <div className="container mx-auto">
+
+            {isManyData ? (
+              "Many Data"
+            ) : (
+              <div className="pt-10 px-3 flex flex-col gap-4">
+                {results?.length > 0 ? results?.map((data, index) => {
+                  return (
+                    <div className="collapse bg-base-100 border-gray-300 border shadow-md" key={index}>
+                      <input type="checkbox" defaultChecked />
+                      <div className="collapse-title font-semibold">{data?.case_number}</div>
+                      <div className="collapse-content text-sm">
+                        {data?.expand?.owner_id?.details}
+                      </div>
+                    </div>
+                  );
+                }) : (
+                  <>
+                    <div className="text-center text-gray-700">No results found!</div>
+                  </>
+                )}
+              </div>
+            )}
+
 
           </div>
         </div>
