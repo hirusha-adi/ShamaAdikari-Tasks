@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { XLg, Search as SearchIcon } from "react-bootstrap-icons";
 import { DayPicker } from "react-day-picker";
 import { getNaduByDate, getNaduDataByDetails, getNaduDatesByCaseNumber, getNaduDateByDataId } from "../../utils/pocketbase";
+import { formatDateLK, getFormattedDayWithSuffix, getFormattedDayOfWeek } from "../../utils/dates";
 
 const Search = () => {
 
@@ -17,6 +18,14 @@ const Search = () => {
 
   async function handleSearch(e) {
     e.preventDefault();
+
+    if (searchMethod === "search_by_date" && !searchValueDate) {
+      return;
+    } else {
+      if (!searchValueText) {
+        return;
+      }
+    }
 
     var results;
     var manyResults;
@@ -51,6 +60,13 @@ const Search = () => {
     setIsManyData(manyResults)
     setResults(results)
     console.log(results)
+  }
+
+  function resetSearch() {
+    setSearchValueDate(null)
+    setSearchValueText("")
+    setResults([])
+    setIsManyData(false)
   }
 
 
@@ -96,7 +112,7 @@ const Search = () => {
                 <SearchIcon className="text-lg mr-1" />
                 Search
               </button>
-              <button className="btn btn-error inline-flex items-center">
+              <button className="btn btn-error inline-flex items-center" onClick={resetSearch}>
                 <XLg className="text-lg" />
               </button>
             </div>
@@ -119,7 +135,7 @@ const Search = () => {
                         <ul className="list-disc pl-5">
                           {item.naduDate.map((dateItem, dateIndex) => (
                             <li key={dateIndex} className="text-sm text-gray-700">
-                              {new Date(dateItem.date).toLocaleDateString()}
+                              {`${formatDateLK(dateItem.date)} (${getFormattedDayWithSuffix(dateItem.date)}, ${getFormattedDayOfWeek(dateItem.date)})`}
                             </li>
                           ))}
                         </ul>

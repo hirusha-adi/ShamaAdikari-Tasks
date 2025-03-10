@@ -1,3 +1,10 @@
+export function formatDateLK(date) {
+    if (!date) return "Invalid Date";
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "Invalid Date";
+    return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
+};
+
 export function getDateOrdinalSuffix(day) {
     if (day > 3 && day < 21) return `${day}th`;
     switch (day % 10) {
