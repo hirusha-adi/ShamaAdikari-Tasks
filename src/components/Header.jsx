@@ -17,7 +17,7 @@ const Header = () => {
           <div className="navbar-start"></div>
           <div className="navbar-center flex">
             <ul className="menu menu-horizontal px-1">
-              <li><NavLink to={"/today"} className="active"><CalendarEvent className="text-lg" /> <div className="hidden md:block">Today</div></NavLink></li>
+              <li><NavLink to={"/today"} className="active"><CalendarEvent className="text-lg" /> <div className="hidden md:block">Cases</div></NavLink></li>
               <li><NavLink to={"/new"}><PlusCircle className="text-lg" /> <div className="hidden md:block">New</div></NavLink></li>
               <li><NavLink to={"/search"}><Search className="text-lg" /> <div className="hidden md:block">Search</div></NavLink></li>
               <li>

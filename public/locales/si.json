@@ -1,6 +1,8 @@
 {
-    "title": "අද {{tab}} නඩු",
-    "no_cases": "නඩු එකතු කර නැත. කරුණාකර ලොග් පොත පරීක්ෂා කරන්න!",
-    "today": "අද",
-    "tomorrow": "හෙට"
+    "today_title": "අද {{tab}} නඩු",
+    "today_no_cases": "නඩු එකතු කර නැත. කරුණාකර ලොග් පොත පරීක්ෂා කරන්න!",
+    "today_today": "අද",
+    "today_tomorrow": "හෙට නඩු",
+    "cases_today": "අද නඩු",
+    "cases_tomorrow": "හෙට නඩු"
 }

@@ -9,7 +9,7 @@ const Today = () => {
   const [selectedTab, setSelectedTab] = useState("Today");
 
   useEffect(() => {
-    document.title = selectedTab;
+    document.title = selectedTab === "Today" ? t("today_today") : t("today_tomorrow");
   }, [selectedTab]);
 
   const {
@@ -44,7 +44,7 @@ const Today = () => {
         <div className="pt-8 mx-auto min-w-xs lg:min-w-md">
           <div className="text-center">
             <div className="text-5xl font-bold">
-              Cases {selectedTab}
+              {selectedTab === "Today" ? t("cases_today") : t("cases_tomorrow")}
             </div>
             <div className="mt-2 text-md text-gray-700">
               {getFormattedDayWithSuffix(selectedTab)}
@@ -74,7 +74,7 @@ const Today = () => {
                   </div>
                 );
               }) : <>
-                <div className="text-center text-gray-700">{t("no_cases")}</div>
+                <div className="text-center text-gray-700">{t("today_no_cases")}</div>
               </>}
             </div>
           )}

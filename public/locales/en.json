@@ -1,6 +1,8 @@
 {
-    "title": "Cases {{tab}}",
-    "no_cases": "No cases added. Please check the log book!",
-    "today": "Today",
-    "tomorrow": "Tomorrow"
+    "today_title": "Cases {{tab}}",
+    "today_no_cases": "No cases added. Please check the log book!",
+    "today_today": "Today",
+    "today_tomorrow": "Tomorrow",
+    "cases_today": "Cases Today",
+    "cases_tomorrow": "Cases Tomorrow"
 }
