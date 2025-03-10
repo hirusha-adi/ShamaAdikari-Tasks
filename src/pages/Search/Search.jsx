@@ -104,7 +104,34 @@ const Search = () => {
           <div className="container mx-auto">
 
             {isManyData ? (
-              "Many Data"
+              <div className="pt-10 px-3 flex flex-col gap-4">
+                {results?.length > 0 ? results.map((item, index) => (
+                  <div key={index} className="border border-gray-300 shadow-md p-4 bg-base-100 rounded-lg">
+                    <div className="font-semibold text-lg">
+                      Case Number: {item.naduData.case_number}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Details: <br /> {item.naduData.details}
+                    </div>
+                    <div className="mt-3">
+                      <h3 className="font-semibold">Case Dates:</h3>
+                      {item.naduDate?.length > 0 ? (
+                        <ul className="list-disc pl-5">
+                          {item.naduDate.map((dateItem, dateIndex) => (
+                            <li key={dateIndex} className="text-sm text-gray-700">
+                              {new Date(dateItem.date).toLocaleDateString()}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500">No related dates available.</p>
+                      )}
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-center text-gray-700">No results found!</div>
+                )}
+              </div>
             ) : (
               <div className="pt-10 px-3 flex flex-col gap-4">
                 {results?.length > 0 ? results?.map((data, index) => {
