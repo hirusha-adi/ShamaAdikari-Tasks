@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { XLg, Search as SearchIcon } from "react-bootstrap-icons";
 import { DayPicker } from "react-day-picker";
-import { getNaduByDate, getNaduDataByDetails, getNaduDatesByCaseNumber, getNaduDateByDataId } from "../../utils/pocketbase";
-import { formatDateLK, getFormattedDayWithSuffix, getFormattedDayOfWeek } from "../../utils/dates";
+import { getNaduByDate, getNaduDataByDetails, getNaduDatesByCaseNumber, getNaduDateByDataId, getNaduDataById } from "../../utils/pocketbase";
+import { formatDateLK, getFormattedDayWithSuffix, getFormattedDayOfWeek, } from "../../utils/dates";
 
 const Search = () => {
 
@@ -18,21 +18,30 @@ const Search = () => {
 
   async function handleSearch(e) {
     e.preventDefault();
+    console.log(searchMethod, searchValueDate, !searchValueDate)
+    console.log(searchMethod === "search_by_date" && !searchValueDate)
 
-    if (searchMethod === "search_by_date" && !searchValueDate) {
+    if ((searchMethod === "search_by_date" && !searchValueDate) ||
+      (searchMethod === "search_by_details" && !searchValueText) ||
+      (searchMethod === "search_by_case_number" && !searchValueText)) {
       return;
-    } else {
-      if (!searchValueText) {
-        return;
-      }
     }
 
     var results;
+    var resultsData;
+    var resultsDate;
     var manyResults;
 
     if (searchMethod === "search_by_date") {
       manyResults = false;
-      results = await getNaduByDate(searchValueDate);
+      results = []
+      const resultsDates = await getNaduByDate(searchValueDate);
+      for (const item of resultsDates) {
+        const tmp = {}
+        tmp.naduData = item.expand.owner_id
+        tmp.naduDate = [{ ...item, expand: undefined },]
+        results.push({ naduData: item, naduDate: item })
+      }
     }
 
     else if (searchMethod === "search_by_details") {
@@ -50,7 +59,20 @@ const Search = () => {
     }
 
     else if (searchMethod === "search_by_case_number") {
-      results = await getNaduDatesByCaseNumber(searchValueText);
+      resultsDate = await getNaduDatesByCaseNumber(searchValueText);
+      if (!resultsDate) {
+        console.log("error")
+      }
+
+      resultsData = await getNaduDataById(resultsDate[0].owner_id);
+      if (!resultsData) {
+        console.log("error")
+      }
+
+      results = {
+        naduData: resultsData,
+        naduDate: resultsDate
+      }
     }
 
     else {
@@ -122,7 +144,7 @@ const Search = () => {
             {isManyData ? (
               <div className="pt-10 px-3 flex flex-col gap-4">
                 {results?.length > 0 ? results.map((item, index) => (
-                  <div key={index} className="border border-gray-300 shadow-md p-4 bg-base-100 rounded-lg">
+                  <div key={index} className="border border-gray-300 shadow-md p-4 bg-base-100 rounded-2xl">
                     <div className="font-semibold text-lg">
                       Case Number: {item.naduData.case_number}
                     </div>
@@ -150,22 +172,37 @@ const Search = () => {
               </div>
             ) : (
               <div className="pt-10 px-3 flex flex-col gap-4">
-                {results?.length > 0 ? results?.map((data, index) => {
-                  return (
-                    <div className="collapse bg-base-100 border-gray-300 border shadow-md" key={index}>
-                      <input type="checkbox" defaultChecked />
-                      <div className="collapse-title font-semibold">{data?.case_number}</div>
-                      <div className="collapse-content text-sm">
-                        {data?.expand?.owner_id?.details}
-                      </div>
+                {results?.naduData ? (
+                  <div className="border border-gray-300 shadow-md p-4 bg-base-100 rounded-2xl">
+                    <div className="font-semibold text-lg">
+                      Case Number: {results?.naduData?.case_number}
                     </div>
-                  );
-                }) : (
-                  <>
-                    <div className="text-center text-gray-700">No results found!</div>
-                  </>
+                    <div className="text-sm text-gray-600">
+                      Details: <br /> {results?.naduData?.details}
+                    </div>
+                    <div className="mt-3">
+                      <h3 className="font-semibold">Case Dates:</h3>
+                      {results?.naduDate?.length > 0 ? (
+                        <ul className="list-disc pl-5">
+                          {results?.naduDate.map((dateItem, dateIndex) => {
+                            const dateObj = new Date(dateItem.date); // Convert date string to Date object
+                            return (
+                              <li key={dateIndex} className="text-sm text-gray-700">
+                                {`${formatDateLK(dateObj)} (${getFormattedDayWithSuffix(dateObj)}, ${getFormattedDayOfWeek(dateObj)})`}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500">No related dates available.</p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-700">No results found!</div>
                 )}
               </div>
+
             )}
 
 
